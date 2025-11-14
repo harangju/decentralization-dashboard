@@ -1,0 +1,192 @@
+/* Minimal CSS for portfolio app */
+
+:root {
+  --text-color: #26251e;
+  --bg-color: #f7f7f4;
+  --link-color: #1d4ed8; /* blue-700 */
+  --link-hover-color: #2563eb; /* blue-600 */
+  --border-color: #d4d4d0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  font-family: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Layout utilities */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.max-w-2xl {
+  max-width: 42rem; /* 672px */
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+/* Spacing */
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.space-x-3 > * + * {
+  margin-left: 0.75rem;
+}
+
+.-mr-3px {
+  margin-right: -3px;
+}
+
+/* Typography */
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.leading-relaxed {
+  line-height: 1.625;
+}
+
+.max-w-none {
+  max-width: none;
+}
+
+/* Colors */
+.text-slate-900 {
+  color: var(--text-color);
+}
+
+/* Borders */
+.border-t {
+  border-top: 1px solid var(--border-color);
+}
+
+/* Icons */
+.w-5 {
+  width: 1.25rem;
+}
+
+.h-5 {
+  height: 1.25rem;
+}
+
+/* Prose-like styling for content */
+.prose {
+  color: var(--text-color);
+  max-width: none;
+}
+
+.prose p {
+  margin-bottom: 1.5rem;
+}
+
+.prose a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: inherit;
+}
+
+/* Links */
+.link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: inherit;
+}
+
+.link-hover:hover {
+  color: var(--link-hover-color);
+}
+
+/* Transitions and animations */
+.transition-all {
+  transition: all 0.1s ease-in-out;
+}
+
+.duration-100 {
+  transition-duration: 100ms;
+}
+
+/* Footer specific styles */
+footer a {
+  color: inherit !important;
+}
+
+footer a:hover {
+  color: inherit !important;
+}
+
+/* Hover effects */
+.hover-scale-95:hover {
+  transform: scale(0.95);
+}
