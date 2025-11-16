@@ -23,4 +23,4 @@ This repository hosts a minimal site built with React and Bun.
     - Run `bun run deploy` to build and deploy.
 
 ## To-Do
-- [ ] use tailwind, shadcn, rechart
+- [ ] use tailwind, shadcn, [charts](https://ui.shadcn.com/charts/area)
