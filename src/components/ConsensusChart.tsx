@@ -22,6 +22,17 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
   const [error, setError] = useState<string | null>(null);
   const [hiddenLines, setHiddenLines] = useState<Set<string>>(new Set());
   const [hoveredLine, setHoveredLine] = useState<string | null>(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Add resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     async function loadData() {
@@ -165,7 +176,11 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className="text-gray-500">Loading...</p>
+        <div className="flex gap-2">
+          <div className="w-3 h-3 bg-orange-600 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-orange-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+          <div className="w-3 h-3 bg-orange-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        </div>
       </div>
     );
   }
@@ -196,7 +211,6 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
     'TON': '#9ebd04',
     'Tron': '#FF060A',
     'Polygon': '#8247E5',
-    //'Base': '#0052FF'
   };
 
   // colors for groups not in colorMap
@@ -208,9 +222,10 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
 
   const renderCustomLegend = (props: any) => {
     const { payload } = props;
+    const isMobile = windowWidth < 640;
     
     return (
-      <div className="flex flex-wrap justify-center gap-4 mb-4">
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-4">
         {payload.map((entry: any, index: number) => {
           const isHidden = hiddenLines.has(entry.value);
           return (
@@ -219,10 +234,10 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
               onClick={() => handleLegendClick(entry.value)}
               onMouseEnter={() => setHoveredLine(entry.value)}
               onMouseLeave={() => setHoveredLine(null)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded transition-all ${
+              className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded transition-all ${
                 isHidden 
                   ? 'opacity-30 bg-gray-100' 
-                  : 'opacity-100 hover:bg-gray-100 hover:shadow-sm'
+                  : 'opacity-100 hover:bg-gray-700 hover:shadow-sm'
               }`}
               style={{
                 textDecoration: isHidden ? 'line-through' : 'none'
@@ -231,14 +246,14 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
               <span
                 style={{
                   backgroundColor: entry.color,
-                  width: '20px',
+                  width: isMobile ? '16px' : '20px',
                   height: '4px',
                   display: 'inline-block',
                   borderRadius: '2px',
                   opacity: isHidden ? 0.3 : 1
                 }}
               />
-              <span className={`text-sm font-medium ${isHidden ? 'text-gray-400' : 'text-gray-700'}`}>
+              <span className={`text-xs sm:text-sm font-medium ${isHidden ? 'text-gray-400' : 'text-gray-300'}`}>
                 {entry.value}
               </span>
             </button>
@@ -248,8 +263,11 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
     );
   };
 
+  const isMobile = windowWidth < 640;
+  const isTablet = windowWidth >= 640 && windowWidth < 1024;
+
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="px-2 sm:px-4 md:px-6 lg:px-8">
       {/* legend at top with more spacing */}
       {groups.length > 1 && (
         <div className="mb-4">
@@ -260,39 +278,63 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
         </div>
       )}
       
-      <div className="w-full" style={{ height: '28em', minHeight: '400px' }}>
+      <div 
+        className="w-full" 
+        style={{ 
+          height: isMobile ? '20em' : '28em', 
+          minHeight: isMobile ? '300px' : '400px' 
+        }}
+      >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={filteredData}
             margin={{ 
               top: 10, 
-              right: window.innerWidth < 640 ? 30 : 60, 
-              left: window.innerWidth < 640 ? 40 : 60, 
-              bottom: 50 
+              right: isMobile ? 10 : isTablet ? 30 : 60, 
+              left: isMobile ? 10 : isTablet ? 40 : 60, 
+              bottom: isMobile ? 30 : 50 
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
             <XAxis 
               dataKey="Date" 
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: isMobile ? 10 : 12, fill: '#9ca3af' }}
               type="category"
+              stroke="#4b5563"
             />
             <YAxis 
               domain={yAxisDomain}
-              tick={{ fontSize: 12 }}
-              width={window.innerWidth < 640 ? 60 : 80}
+              tick={{ fontSize: isMobile ? 10 : 12, fill: '#9ca3af' }}
+              width={isMobile ? 40 : isTablet ? 60 : 80}
+              stroke="#4b5563"
               tickFormatter={(value) => {
                 if (typeof value === 'number') {
-                  return value.toFixed(3);
+                  return value.toFixed(isMobile ? 2 : 3);
                 }
                 return value;
-            }}
+              }}
             />
-            <Tooltip />
+            <Tooltip 
+              formatter={(value: any) => {
+                if (typeof value === 'number') {
+                  return value.toFixed(2);
+                }
+                return value;
+              }}
+              contentStyle={{
+                backgroundColor: '#1f2937',
+                border: '1px solid #374151',
+                borderRadius: '0.5rem',
+                color: '#f3f4f6'
+              }}
+              labelStyle={{ color: '#9ca3af' }}
+            />
             <Brush 
               dataKey="Date" 
-              height={30} 
-              stroke="#8884d8"
+              height={isMobile ? 20 : 30} 
+              stroke="#ea580c"
+              fill="#1e293b"
+              travellerWidth={10}
             />
             {groups.map((group, index) => {
               const isHidden = hiddenLines.has(group);
@@ -307,7 +349,7 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
                   name={group}
                   stroke={colorMap[group] || defaultColors[index % defaultColors.length]}
                   dot={false}
-                  strokeWidth={isHovered ? 4 : 2}
+                  strokeWidth={isHovered ? 4 : isMobile ? 1.5 : 2}
                   connectNulls
                   animationDuration={300}
                   hide={isHidden}
