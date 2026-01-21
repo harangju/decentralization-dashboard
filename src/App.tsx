@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ConsensusChart } from "./components/ConsensusChart";
 import { About } from "./About";
 import { Header } from "./Header";
+import { Footer } from "./Footer";
 
 type MetricType = "Entropy" | "Nakamoto" | "Gini" | "HHI" | "Count";
 type DataSourceType = "consensus" | "defi_gov" | "defi_tvl" | "developers" | "exchanges" | "nft_marketplace";
@@ -39,7 +40,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      {/* Header Navigation */}
+      {/* Header */}
       <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
       {/* Main Content */}
@@ -54,7 +55,7 @@ function App() {
               Visualize the decentralization of crypto subsystems over time.
             </p>
 
-            {/* Subsystem Selector - Separate Block */}
+            {/* SUBSYSTEM SELECTOR */}
             <div className="bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 transition-shadow hover:shadow-xl border border-gray-700">
               <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                 {dataSources.map(source => (
@@ -73,18 +74,18 @@ function App() {
               </div>
             </div>
 
-            {/* Chart with Metric Buttons */}
+            {/* Chart w Metric Buttons */}
             <div className="bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 md:p-6 transition-shadow hover:shadow-xl border border-gray-700">
               <h2 className="text-base sm:text-xl md:text-2xl font-semibold mb-3 sm:mb-4 md:mb-6 transition-all duration-300 text-center text-white px-2">
                 {metrics.find(m => m.value === selectedMetric)?.label} for the {dataSources.find(d => d.value === selectedDataSource)?.label} subsystem
               </h2>
               
-              {/* Fixed height container to prevent size changes during loading */}
+              {/* fixed height container to prevent size change when loading */}
               <div className="min-h-[350px] sm:min-h-[450px] md:min-h-[500px] transition-opacity duration-300">
                 <ConsensusChart metric={selectedMetric} dataSource={selectedDataSource} />
               </div>
               
-              {/* Metric Selector Buttons */}
+              {/* METRIC SELECTOR */}
               <div className="mt-4 sm:mt-6">
                 <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                   {metrics.map(metric => (
@@ -102,7 +103,7 @@ function App() {
                   ))}
                 </div>
                 
-                {/* Metric Description with animation */}
+                {/* Metric description */}
                 <div 
                   key={selectedMetric}
                   className="bg-gray-700/50 rounded-lg p-3 sm:p-4 border-l-4 border-orange-500 animate-fadeIn"
@@ -120,30 +121,8 @@ function App() {
         )}
       </main>
       
-      {/* Styled Footer */}
-      <footer className="max-w-7xl mx-auto mt-12 sm:mt-16 md:mt-20 pt-6 sm:pt-8 pb-6 sm:pb-8 border-t-2 border-gray-700">
-        <div className="text-center px-4">
-          <p className="text-xs sm:text-sm md:text-base text-gray-400">
-            Last updated <span className="font-semibold text-gray-300">January 2026</span>
-          </p>
-          <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-2">
-            For feedback or questions, contact{" "}
-            <a 
-              href="mailto:harang@mit.edu" 
-              className="text-orange-400 hover:text-orange-300 font-medium transition-colors hover:underline"
-            >
-              harang@mit.edu
-            </a>
-            {" "}or{" "}
-            <a 
-              href="mailto:nzain1@jh.edu" 
-              className="text-orange-400 hover:text-orange-300 font-medium transition-colors hover:underline"
-            >
-              nzain1@jh.edu
-            </a>
-          </p>
-        </div>
-      </footer>
+      {/* Footer */}
+      <Footer />
       
       <style jsx>{`
         @keyframes fadeIn {
