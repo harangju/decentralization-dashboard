@@ -51,7 +51,7 @@ function App() {
               Crypto Decentralization Dashboard
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-gray-400 mb-6 sm:mb-8 text-center px-2">
-              Visualize the decentralization of crypto subsystems over time
+              Visualize the decentralization of crypto subsystems over time.
             </p>
 
             {/* Subsystem Selector - Separate Block */}
