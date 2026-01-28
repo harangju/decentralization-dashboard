@@ -263,12 +263,47 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
     );
   };
 
+  // Custom tooltip component that positions below chart on mobile
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (!active || !payload || !payload.length) return null;
+
+    const isMobile = windowWidth < 640;
+    
+    return (
+      <div 
+        className="bg-gray-800 border border-gray-600 rounded-lg p-3 shadow-lg"
+        style={{
+          position: isMobile ? 'relative' : 'absolute',
+          pointerEvents: 'none'
+        }}
+      >
+        <p className="text-gray-300 font-medium mb-2 text-sm">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <div key={index} className="flex items-center gap-2 mb-1">
+            <span
+              style={{
+                backgroundColor: entry.color,
+                width: '12px',
+                height: '3px',
+                display: 'inline-block',
+                borderRadius: '1px',
+              }}
+            />
+            <span className="text-xs text-gray-300">
+              {entry.name}: <span className="font-semibold">{typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
 
   return (
     <div className="px-2 sm:px-4 md:px-6 lg:px-8">
-      {/* legend at top with more spacing */}
+      {/* legend at top */}
       {groups.length > 1 && (
         <div className="mb-4">
           {renderCustomLegend({ payload: groups.map((group, index) => ({
@@ -292,7 +327,7 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
               top: 10, 
               right: isMobile ? 10 : isTablet ? 30 : 60, 
               left: isMobile ? 10 : isTablet ? 40 : 60, 
-              bottom: isMobile ? 30 : 50 
+              bottom: isMobile ? 30 : 50
             }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -315,19 +350,26 @@ export function ConsensusChart({ metric, dataSource }: ConsensusChartProps) {
               }}
             />
             <Tooltip 
+              content={isMobile ? <CustomTooltip /> : undefined}
+              position={isMobile ? { x: 10, y: 10 } : undefined}
+              wrapperStyle={isMobile ? {
+                position: 'absolute',
+                top: '10px',
+                left: '10px',
+              } : {}}
               formatter={(value: any) => {
                 if (typeof value === 'number') {
                   return value.toFixed(2);
                 }
                 return value;
               }}
-              contentStyle={{
+              contentStyle={isMobile ? {} : {
                 backgroundColor: '#1f2937',
                 border: '1px solid #374151',
                 borderRadius: '0.5rem',
                 color: '#f3f4f6'
               }}
-              labelStyle={{ color: '#9ca3af' }}
+              labelStyle={isMobile ? {} : { color: '#9ca3af' }}
             />
             <Brush 
               dataKey="Date" 

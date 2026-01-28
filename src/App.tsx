@@ -77,7 +77,7 @@ function App() {
             {/* Chart w Metric Buttons */}
             <div className="bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 md:p-6 transition-shadow hover:shadow-xl border border-gray-700">
               <h2 className="text-base sm:text-xl md:text-2xl font-semibold mb-3 sm:mb-4 md:mb-6 transition-all duration-300 text-center text-white px-2">
-                {metrics.find(m => m.value === selectedMetric)?.label} for the {dataSources.find(d => d.value === selectedDataSource)?.label} subsystem
+               {/* {metrics.find(m => m.value === selectedMetric)?.label} for the {dataSources.find(d => d.value === selectedDataSource)?.label} subsystem */}
               </h2>
               
               {/* fixed height container to prevent size change when loading */}
